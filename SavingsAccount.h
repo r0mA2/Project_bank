@@ -11,6 +11,7 @@ public:
     void Withdraw(double amount) override;
     void ApplyInterest();
     void DisplayInfo() const override;
+    double GetInterestRate() const;
 };
 
 #endif
