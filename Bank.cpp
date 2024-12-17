@@ -1,10 +1,16 @@
 #include "include/Bank.h"
 #include "include/SavingsAccount.h"
 #include "include/CheckingAccount.h"
+#include "include/BusinessAccount.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <algorithm>
 #include <iomanip>
 
+Bank::Bank() {
+    LoadData();
+}
 
 shared_ptr<Customer> Bank::GetCustomer(int index) const {
     if (index < 0 || index >= customers.size()) {
@@ -54,7 +60,6 @@ void Bank::DeleteAccount(int index) {
     else {
         std::cout << "Некорректный индекс аккаунта." << std::endl;
     }
-
 }
 
 double Bank::CalculateTotalAssets() const {
@@ -189,6 +194,77 @@ void Bank::Transfer(int fromIndex, int toIndex, double amount) {
     }
     else {
         std::cout << "Некорректные счета для перевода!" << std::endl;
+    }
+}
+
+
+void Bank::LoadData() {
+    std::ifstream customersFile(CUSTOMERS_FILE);
+    if (customersFile.is_open()) {
+        std::string line;
+        while (std::getline(customersFile, line)) {
+            std::stringstream ss(line);
+            std::string name, id;
+            std::getline(ss, name, ',');
+            std::getline(ss, id, ',');
+            AddCustomer(name, id);
+        }
+        customersFile.close();
+    }
+
+    std::ifstream accountsFile(ACCOUNTS_FILE);
+     if (accountsFile.is_open()) {
+        std::string line;
+        while (std::getline(accountsFile, line)) {
+            std::stringstream ss(line);
+            std::string typeStr;
+            double balance;
+            std::string extraValueStr; // Для процентной ставки или лимита
+
+            std::getline(ss, typeStr, ',');
+            ss >> balance;
+            if(ss.peek() == ',') ss.ignore();
+             std::getline(ss, extraValueStr, ',');
+
+
+
+            if (typeStr == "1") {
+                double interestRate = std::stod(extraValueStr);
+                 AddAccount(std::make_shared<SavingsAccount>(balance, interestRate));
+            } else if (typeStr == "2") {
+                 double overdraftLimit = std::stod(extraValueStr);
+                AddAccount(std::make_shared<CheckingAccount>(balance, overdraftLimit));
+            } else if (typeStr == "3") {
+                 AddAccount(std::make_shared<BusinessAccount>(balance));
+            }
+        }
+        accountsFile.close();
+    }
+}
+
+void Bank::SaveData() const {
+    std::ofstream customersFile(CUSTOMERS_FILE);
+    if (customersFile.is_open()) {
+        for (const auto& customer : customers) {
+            customersFile << customer->GetName() << "," << customer->GetId() << std::endl;
+        }
+        customersFile.close();
+    }
+
+    std::ofstream accountsFile(ACCOUNTS_FILE);
+    if (accountsFile.is_open()) {
+        for (const auto& account : accounts) {
+            if (auto savings = std::dynamic_pointer_cast<SavingsAccount>(account)) {
+                accountsFile << "1," << std::fixed << std::setprecision(2) << savings->GetBalance() << "," << std::fixed << std::setprecision(2) << savings->interestRate << std::endl;
+            }
+            else if (auto checking = std::dynamic_pointer_cast<CheckingAccount>(account)) {
+                 accountsFile << "2," << std::fixed << std::setprecision(2) << checking->GetBalance() << "," << std::fixed << std::setprecision(2) << checking->overdraftLimit << std::endl;
+            }
+             else if (auto business = std::dynamic_pointer_cast<BusinessAccount>(account)) {
+                accountsFile << "3," << std::fixed << std::setprecision(2) << business->GetBalance() << "," << std::endl;
+            }
+         }
+         accountsFile.close();
     }
 }
 
