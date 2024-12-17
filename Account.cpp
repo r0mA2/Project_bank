@@ -1,4 +1,4 @@
-#include "include/Account.h"
+#include "Account.h"
 #include <iomanip>
 
 Account::Account(double initialBalance) : balance(initialBalance) {}
@@ -7,7 +7,8 @@ void Account::Deposit(double amount) {
     if (amount > 0) {
         balance += amount;
         std::cout << "Депозит: " << std::fixed << std::setprecision(2) << amount << " выполнен." << std::endl;
-    } else {
+    }
+    else {
         std::cout << "Сумма депозита должна быть положительной." << std::endl;
     }
 }
