@@ -8,6 +8,8 @@
 #include "Customer.h"
 #include "Account.h"
 
+using namespace std;
+
 class Bank {
 private:
     std::vector<std::shared_ptr<Customer>> customers;
@@ -17,7 +19,7 @@ private:
 public:
     Bank();
     shared_ptr<Customer> GetCustomer(int index) const;
-     std::vector<std::shared_ptr<Customer>> SearchCustomer(const std::string& name) const;
+    std::vector<std::shared_ptr<Customer>> SearchCustomer(const std::string& name) const;
     void DeleteCustomer(int index);
     void DeleteAccount(int index);
     double CalculateTotalAssets() const;
@@ -26,8 +28,8 @@ public:
     void AddAccount(std::shared_ptr<Account> account);
     std::shared_ptr<Account> GetAccount(int index) const;
     void ShowAccounts() const;
-     void ShowCustomers() const;
-     void Transfer(std::shared_ptr<Account> from, std::shared_ptr<Account> to, double amount);
+    void ShowCustomers() const;
+    void Transfer(std::shared_ptr<Account> from, std::shared_ptr<Account> to, double amount);
     void ShowAccountInfo(int index) const;
     void DepositToAccount(int index, double amount);
     void WithdrawFromAccount(int index, double amount);
