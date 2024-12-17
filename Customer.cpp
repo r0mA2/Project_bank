@@ -1,4 +1,4 @@
-#include "include/Customer.h"
+#include "Customer.h"
 
 Customer::Customer(const std::string& name, const std::string& id) : name(name), id(id) {}
 std::string Customer::GetName() const { return name; }
