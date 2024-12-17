@@ -12,8 +12,10 @@ class Bank {
 private:
     std::vector<std::shared_ptr<Customer>> customers;
     std::vector<std::shared_ptr<Account>> accounts;
-
+    const std::string CUSTOMERS_FILE = "data/customers.txt";
+    const std::string ACCOUNTS_FILE = "data/accounts.txt";
 public:
+    Bank();
     shared_ptr<Customer> GetCustomer(int index) const;
      std::vector<std::shared_ptr<Customer>> SearchCustomer(const std::string& name) const;
     void DeleteCustomer(int index);
@@ -32,6 +34,8 @@ public:
     void ApplyInterestToSavings();
     void UpdateOverdraftLimit(int index, double newLimit);
     void Transfer(int fromIndex, int toIndex, double amount);
+    void LoadData();
+    void SaveData() const;
 };
 
 bool isValidId(const std::string& id);
