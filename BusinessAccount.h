@@ -1,13 +1,17 @@
-#ifndef BUSINESSACCOUNT_H
-#define BUSINESSACCOUNT_H
+#ifndef CHECKINGACCOUNT_H
+#define CHECKINGACCOUNT_H
 
 #include "Account.h"
 
-class BusinessAccount : public Account {
+class CheckingAccount : public Account {
+private:
+    double overdraftLimit;
 public:
-    BusinessAccount(double initialBalance);
+    CheckingAccount(double initialBalance, double overdraftLimit = 0);
     void Withdraw(double amount) override;
     void DisplayInfo() const override;
+    void SetOverdraftLimit(double newLimit);
+    double GetOverdraftLimit() const;
 };
 
 #endif
