@@ -1,7 +1,7 @@
-#include "include/Bank.h"
-#include "include/SavingsAccount.h"
-#include "include/CheckingAccount.h"
-#include "include/BusinessAccount.h"
+#include "Bank.h"
+#include "SavingsAccount.h"
+#include "CheckingAccount.h"
+#include "BusinessAccount.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -40,7 +40,8 @@ void Bank::DeleteCustomer(int index) {
 
     if (hasAccounts) {
         std::cout << "Нельзя удалить клиента, т.к. у него есть открытые счета." << std::endl;
-    } else {
+    }
+    else {
         customers.erase(customers.begin() + index);
         std::cout << "Клиент удален." << std::endl;
     }
@@ -73,7 +74,7 @@ double Bank::CalculateTotalAssets() const {
 void Bank::SortAccountsByBalance() {
     std::sort(accounts.begin(), accounts.end(), [](const auto& a, const auto& b) {
         return a->GetBalance() < b->GetBalance();
-    });
+        });
     std::cout << "Счета отсортированы по балансу (от меньшего к большему)." << std::endl;
 }
 
@@ -94,15 +95,15 @@ std::shared_ptr<Account> Bank::GetAccount(int index) const {
 }
 
 void Bank::ShowAccounts() const {
-     std::cout << "-------------------- Счета --------------------" << std::endl;
-        for (const auto& account : accounts) {
-            std::cout << *account;
-            std::cout << "------------------------------------------------" << std::endl;
-        }
+    std::cout << "-------------------- Счета --------------------" << std::endl;
+    for (const auto& account : accounts) {
+        std::cout << *account;
+        std::cout << "------------------------------------------------" << std::endl;
+    }
 }
 
 void Bank::ShowCustomers() const {
-     std::cout << "------------------ Клиенты -------------------" << std::endl;
+    std::cout << "------------------ Клиенты -------------------" << std::endl;
     for (const auto& customer : customers) {
         customer->DisplayInfo();
     }
@@ -159,7 +160,7 @@ void Bank::WithdrawFromAccount(int index, double amount) {
 }
 
 void Bank::ApplyInterestToSavings() {
-     std::cout << "--- Начисление процентов на сберегательные счета ---" << std::endl;
+    std::cout << "--- Начисление процентов на сберегательные счета ---" << std::endl;
     for (const auto& account : accounts) {
         if (std::dynamic_pointer_cast<SavingsAccount>(account)) {
             std::dynamic_pointer_cast<SavingsAccount>(account)->ApplyInterest();
@@ -213,7 +214,7 @@ void Bank::LoadData() {
     }
 
     std::ifstream accountsFile(ACCOUNTS_FILE);
-     if (accountsFile.is_open()) {
+    if (accountsFile.is_open()) {
         std::string line;
         while (std::getline(accountsFile, line)) {
             std::stringstream ss(line);
@@ -223,19 +224,21 @@ void Bank::LoadData() {
 
             std::getline(ss, typeStr, ',');
             ss >> balance;
-            if(ss.peek() == ',') ss.ignore();
-             std::getline(ss, extraValueStr, ',');
+            if (ss.peek() == ',') ss.ignore();
+            std::getline(ss, extraValueStr, ',');
 
 
 
             if (typeStr == "1") {
                 double interestRate = std::stod(extraValueStr);
-                 AddAccount(std::make_shared<SavingsAccount>(balance, interestRate));
-            } else if (typeStr == "2") {
-                 double overdraftLimit = std::stod(extraValueStr);
+                AddAccount(std::make_shared<SavingsAccount>(balance, interestRate));
+            }
+            else if (typeStr == "2") {
+                double overdraftLimit = std::stod(extraValueStr);
                 AddAccount(std::make_shared<CheckingAccount>(balance, overdraftLimit));
-            } else if (typeStr == "3") {
-                 AddAccount(std::make_shared<BusinessAccount>(balance));
+            }
+            else if (typeStr == "3") {
+                AddAccount(std::make_shared<BusinessAccount>(balance));
             }
         }
         accountsFile.close();
@@ -255,16 +258,16 @@ void Bank::SaveData() const {
     if (accountsFile.is_open()) {
         for (const auto& account : accounts) {
             if (auto savings = std::dynamic_pointer_cast<SavingsAccount>(account)) {
-                accountsFile << "1," << std::fixed << std::setprecision(2) << savings->GetBalance() << "," << std::fixed << std::setprecision(2) << savings->interestRate << std::endl;
+                accountsFile << "1," << std::fixed << std::setprecision(2) << savings->GetBalance() << "," << std::fixed << std::setprecision(2) << savings->GetInterestRate() << std::endl;
             }
             else if (auto checking = std::dynamic_pointer_cast<CheckingAccount>(account)) {
-                 accountsFile << "2," << std::fixed << std::setprecision(2) << checking->GetBalance() << "," << std::fixed << std::setprecision(2) << checking->overdraftLimit << std::endl;
+                accountsFile << "2," << std::fixed << std::setprecision(2) << checking->GetBalance() << "," << std::fixed << std::setprecision(2) << checking->GetOverdraftLimit() << std::endl;
             }
-             else if (auto business = std::dynamic_pointer_cast<BusinessAccount>(account)) {
+            else if (auto business = std::dynamic_pointer_cast<BusinessAccount>(account)) {
                 accountsFile << "3," << std::fixed << std::setprecision(2) << business->GetBalance() << "," << std::endl;
             }
-         }
-         accountsFile.close();
+        }
+        accountsFile.close();
     }
 }
 
