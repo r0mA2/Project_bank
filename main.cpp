@@ -18,16 +18,11 @@ int main() {
         std::cout << "2. Добавить аккаунт" << std::endl;
         std::cout << "3. Показать клиентов" << std::endl;
         std::cout << "4. Показать счета" << std::endl;
-        std::cout << "5. Удалить клиента" << std::endl;
-        std::cout << "6. Удалить счет" << std::endl;
-        std::cout << "7. Вывести общий баланс" << std::endl;
-        std::cout << "8. Сортировать счета по балансу" << std::endl;
-        std::cout << "9. Показать информацию об аккаунте" << std::endl;
-        std::cout << "10. Внести деньги на счет" << std::endl;
-        std::cout << "11. Снять деньги со счета" << std::endl;
-        std::cout << "12. Начислить проценты на сберегательные счета" << std::endl;
-        std::cout << "13. Обновить лимит овердрафта" << std::endl;
-        std::cout << "14. Перевести деньги между счетами" << std::endl;
+        std::cout << "5. Вывести общий баланс" << std::endl;
+        std::cout << "6. Показать информацию об аккаунте" << std::endl;
+        std::cout << "7. Внести деньги на счет" << std::endl;
+        std::cout << "8. Снять деньги со счета" << std::endl;
+        std::cout << "9. Перевести деньги между счетами" << std::endl;
         std::cout << "0. Выйти и сохранить" << std::endl;
         std::cout << "Выберите действие: ";
         std::cin >> choice;
@@ -90,37 +85,19 @@ int main() {
             break;
         }
         case 5: {
-            int index;
-            std::cout << "Введите индекс клиента для удаления: ";
-            std::cin >> index;
-            bank.DeleteCustomer(index);
-            break;
-        }
-        case 6: {
-            int index;
-            std::cout << "Введите индекс счета для удаления: ";
-            std::cin >> index;
-            bank.DeleteAccount(index);
-            break;
-        }
-        case 7: {
             std::cout << "------------------------------------------------" << std::endl;
             std::cout << "Всего средств в банке: " << std::fixed << std::setprecision(2) << bank.CalculateTotalAssets() << std::endl;
             std::cout << "------------------------------------------------" << std::endl;
             break;
         }
-        case 8: {
-            bank.SortAccountsByBalance();
-            break;
-        }
-        case 9: {
+        case 6: {
             int index;
             std::cout << "Введите индекс аккаунта для просмотра информации: ";
             std::cin >> index;
             bank.ShowAccountInfo(index);
             break;
         }
-        case 10: {
+        case 7: {
             int index;
             double amount;
             std::cout << "Введите индекс аккаунта для пополнения: ";
@@ -130,7 +107,7 @@ int main() {
             bank.DepositToAccount(index, amount);
             break;
         }
-        case 11: {
+        case 8: {
             int index;
             double amount;
             std::cout << "Введите индекс аккаунта для снятия: ";
@@ -140,21 +117,7 @@ int main() {
             bank.WithdrawFromAccount(index, amount);
             break;
         }
-        case 12: {
-            bank.ApplyInterestToSavings();
-            break;
-        }
-        case 13: {
-            int index;
-            double newLimit;
-            std::cout << "Введите индекс расчетного счета для изменения лимита овердрафта: ";
-            std::cin >> index;
-            std::cout << "Введите новый лимит овердрафта: ";
-            std::cin >> newLimit;
-            bank.UpdateOverdraftLimit(index, newLimit);
-            break;
-        }
-        case 14: {
+        case 9: {
             int fromIndex, toIndex;
             double amount;
             std::cout << "Введите индекс счета, с которого нужно перевести деньги: ";
